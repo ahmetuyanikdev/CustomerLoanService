@@ -1,6 +1,6 @@
 package com.credit.module.service.impl;
 
-import com.credit.module.dao.CustomerRepository;
+import com.credit.module.dao.UserRepository;
 import com.credit.module.model.Customer;
 import com.credit.module.service.CustomerService;
 import lombok.Setter;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service;
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Override
     public Customer getCustomerById(long id) {
-        return customerRepository.findById(id).orElse(null);
+        return (Customer) userRepository.findById(id).orElse(null);
     }
 
     @Override
     public ResponseEntity<Object> createCustomer(Customer customer) {
-        customerRepository.save(customer);
+        userRepository.save(customer);
         return ResponseEntity.ok().body("Customer saved successfully");
     }
 }

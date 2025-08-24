@@ -1,6 +1,6 @@
 package com.credit.module.validator;
 
-import com.credit.module.dao.CustomerRepository;
+import com.credit.module.dao.UserRepository;
 import com.credit.module.data.LoanCreation;
 import com.credit.module.model.Customer;
 import com.credit.module.model.Loan;
@@ -18,14 +18,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class LoanCreationValidatorTest {
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
     private LoanCreationValidator loanCreationValidator;
 
     @BeforeEach
     void setUp() {
-        customerRepository = mock(CustomerRepository.class);
+        userRepository = mock(UserRepository.class);
         loanCreationValidator = new LoanCreationValidator();
-        loanCreationValidator.setCustomerRepository(customerRepository);
+        loanCreationValidator.setUserRepository(userRepository);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class LoanCreationValidatorTest {
         loanInstallment2.setAmount(75f);
         loanInstallment2.setLoanId(1L);
         loanInstallment2.setPaid(false);
-        when(customerRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
+        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
         loanCreation.setLoanInstallments(List.of(loanInstallment1, loanInstallment2));
         SimpleErrors bindingResult = (SimpleErrors) loanCreationValidator.validateObject(loanCreation);
         assertTrue(bindingResult.hasErrors());
@@ -93,7 +93,7 @@ public class LoanCreationValidatorTest {
         loanInstallment3.setLoanId(1L);
         loanInstallment3.setPaid(false);
 
-        when(customerRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
+        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
         loanCreation.setLoanInstallments(List.of(loanInstallment1, loanInstallment2, loanInstallment3));
         SimpleErrors bindingResult = (SimpleErrors) loanCreationValidator.validateObject(loanCreation);
         assertFalse(bindingResult.hasErrors());

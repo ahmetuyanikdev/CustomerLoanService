@@ -1,11 +1,12 @@
 package com.credit.module.service.impl;
 
-import com.credit.module.dao.CustomerRepository;
 import com.credit.module.dao.LoanInstallmentRepository;
 import com.credit.module.dao.LoanRepository;
+import com.credit.module.dao.UserRepository;
 import com.credit.module.data.LoanCreation;
 import com.credit.module.data.LoanPayment;
 import com.credit.module.data.LoanPaymentResult;
+import com.credit.module.model.Customer;
 import com.credit.module.model.Loan;
 import com.credit.module.model.LoanInstallment;
 import com.credit.module.service.LoanService;
@@ -35,7 +36,7 @@ public class LoanServiceImpl implements LoanService {
     private LoanRepository loanRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     @Qualifier("loanCreationValidator")
@@ -110,10 +111,11 @@ public class LoanServiceImpl implements LoanService {
     private void updateCustomerCreditAfterPayment(LoanPayment loanPayment) {
         Optional<Loan> loanOptional = loanRepository.findById(loanPayment.getLoanId());
         loanOptional.flatMap(
-                        loan -> customerRepository.findById(loan.getCustomerId()))
-                .ifPresent(customer -> {
+                        loan -> userRepository.findById(loan.getCustomerId()))
+                .ifPresent(user -> {
+                    Customer customer = (Customer) user;
                     customer.setUsedCreditLimit(customer.getUsedCreditLimit() + loanPayment.getAmount());
-                    customerRepository.save(customer);
+                    userRepository.save(customer);
                 });
     }
 

@@ -1,8 +1,8 @@
 package com.credit.module.service;
 
-import com.credit.module.dao.CustomerRepository;
 import com.credit.module.dao.LoanInstallmentRepository;
 import com.credit.module.dao.LoanRepository;
+import com.credit.module.dao.UserRepository;
 import com.credit.module.data.LoanCreation;
 import com.credit.module.data.LoanPayment;
 import com.credit.module.data.LoanPaymentResult;
@@ -33,19 +33,19 @@ public class LoanServiceImplTest {
     private LoanServiceImpl loanService;
     private Validator loanCreationValidator;
     private Validator loanPaymentValidator;
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         loanInstallmentRepository = mock(LoanInstallmentRepository.class);
         loanRepository = mock(LoanRepository.class);
-        customerRepository = mock(CustomerRepository.class);
+        userRepository = mock(UserRepository.class);
         loanCreationValidator = mock(LoanCreationValidator.class);
         loanPaymentValidator = mock(LoanPaymentValidator.class);
         loanService = new LoanServiceImpl();
         loanService.setLoanInstallmentRepository(loanInstallmentRepository);
         loanService.setLoanRepository(loanRepository);
-        loanService.setCustomerRepository(customerRepository);
+        loanService.setUserRepository(userRepository);
         loanService.setLoanCreationValidator(loanCreationValidator);
         loanService.setLoanPaymentValidator(loanPaymentValidator);
 
@@ -148,8 +148,8 @@ public class LoanServiceImplTest {
         when(loanPaymentValidator.validateObject(any())).thenReturn(result);
         when(loanInstallmentRepository.saveAll(loanInstallments)).thenReturn(loanInstallments);
         when(loanRepository.findById(anyLong())).thenReturn(Optional.of(loan));
-        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
-        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+        when(userRepository.save(any(Customer.class))).thenReturn(customer);
         when(loanInstallmentRepository.findAllByLoanId(anyLong())).thenReturn(loanInstallments);
 
         ResponseEntity<Object> response = loanService.payLoan(loanPayment);

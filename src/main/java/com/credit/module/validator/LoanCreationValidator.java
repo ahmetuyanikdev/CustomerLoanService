@@ -1,10 +1,11 @@
 package com.credit.module.validator;
 
-import com.credit.module.dao.CustomerRepository;
+import com.credit.module.dao.UserRepository;
 import com.credit.module.data.LoanCreation;
 import com.credit.module.model.Customer;
 import com.credit.module.model.Loan;
 import com.credit.module.model.LoanInstallment;
+import com.credit.module.model.User;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class LoanCreationValidator implements Validator {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -29,13 +30,13 @@ public class LoanCreationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         LoanCreation loanCreation = (LoanCreation) target;
-        Optional<Customer> customerOptional = customerRepository.findById(loanCreation.getLoan().getCustomerId());
-        if (customerOptional.isEmpty()) {
+        Optional<User> userOptional = userRepository.findById(loanCreation.getLoan().getCustomerId());
+        if (userOptional.isEmpty()) {
             errors.reject("customer.not.found", "Customer not found");
             return;
         }
         Loan loan = loanCreation.getLoan();
-        Customer customer = customerOptional.get();
+        Customer customer = (Customer) userOptional.get();
         if (customer.getCreditLimit() - customer.getUsedCreditLimit() < loan.getLoanAmount()) {
             errors.reject("customer.credit.limit.not.sufficient", "Customer credit limit not sufficient");
             return;

@@ -15,10 +15,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/loan")
 public class LoanController {
+
     @Autowired
     private LoanService loanService;
 
-    @GetMapping(value = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/list/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Loan> listCustomerLoans(@PathVariable long customerId) {
         return loanService.listCustomerLoans(customerId);
     }
