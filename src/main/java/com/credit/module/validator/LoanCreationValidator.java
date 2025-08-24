@@ -5,6 +5,7 @@ import com.credit.module.data.LoanCreation;
 import com.credit.module.model.Customer;
 import com.credit.module.model.Loan;
 import com.credit.module.model.LoanInstallment;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component("loanCreationValidator")
+@Setter
 public class LoanCreationValidator implements Validator {
 
     @Autowired

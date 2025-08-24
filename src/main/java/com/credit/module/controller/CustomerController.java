@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+
     @Autowired
     CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Customer customer) {
-        customerService.createCustomer(customer);
-        return ResponseEntity.ok("Customer saved successfully");
+    public ResponseEntity<Object> save(@RequestBody Customer customer) {
+        return customerService.createCustomer(customer);
     }
 
     @GetMapping(value = "/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
 
 import static com.credit.module.util.LoanUtil.getEligibleToPayLoanInstallments;
@@ -41,7 +39,8 @@ public class LoanPaymentValidator implements Validator {
             errors.reject("loan.payment.installments.paid", "All Loan installments have been paid already");
             return;
         }
-        List<LoanInstallment> eligibleLoanInstallmentsToPay = getEligibleToPayLoanInstallments(unpaidLoanInstallmentList);
+        List<LoanInstallment> eligibleLoanInstallmentsToPay =
+                getEligibleToPayLoanInstallments(unpaidLoanInstallmentList);
 
         if (eligibleLoanInstallmentsToPay.isEmpty()) {
             errors.reject("loan.payment.date.invalid", "Loan payment date must be between first day of first month " +

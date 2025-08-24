@@ -10,6 +10,7 @@ import com.credit.module.model.Loan;
 import com.credit.module.model.LoanInstallment;
 import com.credit.module.service.LoanService;
 import com.credit.module.util.LoanUtil;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Setter
 public class LoanServiceImpl implements LoanService {
 
     @Autowired
@@ -76,7 +78,6 @@ public class LoanServiceImpl implements LoanService {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors.getAllErrors());
         }
-
         List<LoanInstallment> unPaidLoanInstallments =
                 loanInstallmentRepository.findAllByLoanId(loanPayment.getLoanId()).stream().
                         filter(installment -> !installment.isPaid()).toList();
@@ -90,6 +91,13 @@ public class LoanServiceImpl implements LoanService {
         Optional<LoanInstallment> isThereNotPaidInstallment =
                 loanInstallmentRepository.findAllByLoanId(loanPayment.getLoanId()).stream().
                         filter(installment -> !installment.isPaid()).findAny();
+
+        if (isThereNotPaidInstallment.isEmpty()) {
+            loanRepository.findById(loanPayment.getLoanId()).ifPresent(loan -> {
+                loan.setPaid(true);
+                loanRepository.save(loan);
+            });
+        }
 
         double totalAmountSpent = installmentPaymentResult.stream().mapToDouble(LoanInstallment::getPaidAmount).sum();
 
@@ -127,7 +135,6 @@ public class LoanServiceImpl implements LoanService {
     private static void setNextInstallmentDueDates(LoanCreation loanCreation, Loan loan, LocalDate localDate, int i) {
         for (LoanInstallment installment : loanCreation.getLoanInstallments()) {
             installment.setLoanId(loan.getId());
-            installment.setDueDate(loan.getCreateDate());
             LocalDate firstDayOfNextMonth = localDate.withMonth(localDate.getMonthValue() + i).withDayOfMonth(1);
             installment.setDueDate(firstDayOfNextMonth);
             i++;

@@ -33,7 +33,7 @@ public class LoanController {
         return loanService.createCustomerLoan(loanCreation);
     }
 
-    @PutMapping
+    @PutMapping("/payment")
     public ResponseEntity<Object> payLoan(@RequestBody LoanPayment loanPayment) {
         return loanService.payLoan(loanPayment);
     }
