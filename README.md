@@ -4,7 +4,7 @@ After cloning this repo, you can navigate to project directory where pom.xml exi
 Then execute 
 **mvn clean compile install
 
-It will fetch depencies that you do not have in your local repo, 
+It will fetch dependencies that you do not have in your local repo, 
 build the project, creates .jar project package and also run the unit tests under test folder
 
 How to start the application 
