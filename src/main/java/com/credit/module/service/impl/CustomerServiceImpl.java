@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of the {@link CustomerService} interface that provides services related to Customer operations.
+ * This class manages the retrieval, creation, and listing of Customer entities.
+ *
+ */
 @Service
 @Setter
 public class CustomerServiceImpl implements CustomerService {

@@ -15,6 +15,21 @@ import org.springframework.validation.Validator;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Validator implementation for validating the creation of loans. This class ensures that
+ * the loan creation process adheres to specific business rules and constraints to maintain
+ * financial integrity and validity.
+ *
+ * Key validations performed by this validator:
+ * - Checks if the customer associated with the loan exists in the system by using the customer ID.
+ * - Validates that the customer's available credit limit is sufficient to accommodate the requested loan amount.
+ * - Ensures that the loan's number of installments is a multiple of 3 and does not exceed 24.
+ * - Validates that the loan's interest rate falls within the acceptable range of 0.1 to 0.5.
+ * - Confirms that all loan installment amounts are the same.
+ * - Validates that the total sum of all loan installments, including interest, is equal to the calculated loan amount.
+
+ */
 @Component("loanCreationValidator")
 @Setter
 public class LoanCreationValidator implements Validator {

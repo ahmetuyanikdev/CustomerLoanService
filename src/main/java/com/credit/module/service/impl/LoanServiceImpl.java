@@ -25,6 +25,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the LoanService interface to handle loan-related operations.
+ * Responsible for managing loans and loan installments, including creation, retrieval,
+ * and payment operations. This class interacts with various repositories and validators
+ * to perform its operations.
+ */
 @Service
 @Setter
 public class LoanServiceImpl implements LoanService {
