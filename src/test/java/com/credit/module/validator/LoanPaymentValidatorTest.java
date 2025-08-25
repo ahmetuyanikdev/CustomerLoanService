@@ -38,7 +38,7 @@ public class LoanPaymentValidatorTest {
         customer.setSurname("Doe");
         customer.setCreditLimit(10f);
         Loan loan = new Loan();
-        loan.setCustomerId(1L);
+        loan.setCustomerId("1L");
         loan.setId(1L);
         loan.setLoanAmount(100f);
         loan.setInterestRate(0.2f);
@@ -79,7 +79,7 @@ public class LoanPaymentValidatorTest {
         customer.setSurname("Doe");
         customer.setCreditLimit(10f);
         Loan loan = new Loan();
-        loan.setCustomerId(1L);
+        loan.setCustomerId("1L");
         loan.setId(1L);
         loan.setLoanAmount(100f);
         loan.setInterestRate(0.2f);

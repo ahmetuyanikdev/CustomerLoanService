@@ -36,7 +36,7 @@ public class LoanCreationValidatorTest {
         customer.setSurname("Doe");
         customer.setCreditLimit(10f);
         Loan loan = new Loan();
-        loan.setCustomerId(1L);
+        loan.setCustomerId("1L");
         loan.setId(1L);
         loan.setLoanAmount(100f);
         loan.setInterestRate(0.5f);
@@ -53,7 +53,7 @@ public class LoanCreationValidatorTest {
         loanInstallment2.setAmount(75f);
         loanInstallment2.setLoanId(1L);
         loanInstallment2.setPaid(false);
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
+        when(userRepository.findByUserId("1L")).thenReturn(java.util.Optional.of(customer));
         loanCreation.setLoanInstallments(List.of(loanInstallment1, loanInstallment2));
         SimpleErrors bindingResult = (SimpleErrors) loanCreationValidator.validateObject(loanCreation);
         assertTrue(bindingResult.hasErrors());
@@ -69,7 +69,7 @@ public class LoanCreationValidatorTest {
         customer.setSurname("Doe");
         customer.setCreditLimit(160f);
         Loan loan = new Loan();
-        loan.setCustomerId(1L);
+        loan.setCustomerId("1L");
         loan.setId(1L);
         loan.setLoanAmount(100f);
         loan.setInterestRate(0.5f);
@@ -93,7 +93,7 @@ public class LoanCreationValidatorTest {
         loanInstallment3.setLoanId(1L);
         loanInstallment3.setPaid(false);
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(customer));
+        when(userRepository.findByUserId("1L")).thenReturn(java.util.Optional.of(customer));
         loanCreation.setLoanInstallments(List.of(loanInstallment1, loanInstallment2, loanInstallment3));
         SimpleErrors bindingResult = (SimpleErrors) loanCreationValidator.validateObject(loanCreation);
         assertFalse(bindingResult.hasErrors());

@@ -25,31 +25,31 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    void getCustomerById_returnsCustomer_whenPresent() {
+    void getCustomerById_returnsCustomer_whenPresentUser() {
         Customer customer = new Customer();
         customer.setId(42L);
         customer.setName("John");
         customer.setSurname("Doe");
+        customer.setUserId("john42");
+        when(userRepository.findByUserId("john42")).thenReturn(Optional.of(customer));
 
-        when(userRepository.findById(42L)).thenReturn(Optional.of(customer));
-
-        Customer result = customerService.getCustomerById(42L);
+        Customer result = customerService.getCustomerByUserId("john42");
 
         assertNotNull(result);
         assertEquals(42L, result.getId());
         assertEquals("John", result.getName());
         assertEquals("Doe", result.getSurname());
-        verify(userRepository).findById(42L);
+        verify(userRepository).findByUserId("john42");
     }
 
     @Test
-    void getCustomerById_returnsNull_whenNotFound() {
-        when(userRepository.findById(100L)).thenReturn(Optional.empty());
+    void getCustomerByUserId_returnsNull_whenNotFound() {
+        when(userRepository.findByUserId("userX")).thenReturn(Optional.empty());
 
-        Customer result = customerService.getCustomerById(100L);
+        Customer result = customerService.getCustomerByUserId("userX");
 
         assertNull(result);
-        verify(userRepository).findById(100L);
+        verify(userRepository).findByUserId("userX");
     }
 
     @Test
@@ -57,7 +57,8 @@ public class CustomerServiceImplTest {
         Customer newCustomer = new Customer();
         newCustomer.setName("John");
         newCustomer.setSurname("Doe");
-
+        newCustomer.setUserId("john42");
+        newCustomer.setPassword("john42");
         when(userRepository.save(any(Customer.class))).thenReturn(newCustomer);
 
         ResponseEntity<Object> response = customerService.createCustomer(newCustomer);

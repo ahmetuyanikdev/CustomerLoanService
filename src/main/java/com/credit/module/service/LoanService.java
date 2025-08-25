@@ -15,7 +15,7 @@ public interface LoanService {
      * @param customerId
      * @return
      */
-    List<Loan> listCustomerLoans(long customerId);
+    List<Loan> listCustomerLoans(String customerId);
 
     /**
      * list installments for the given loan

@@ -30,7 +30,7 @@ public class LoanCreationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         LoanCreation loanCreation = (LoanCreation) target;
-        Optional<User> userOptional = userRepository.findById(loanCreation.getLoan().getCustomerId());
+        Optional<User> userOptional = userRepository.findByUserId(loanCreation.getLoan().getCustomerId());
         if (userOptional.isEmpty()) {
             errors.reject("customer.not.found", "Customer not found");
             return;

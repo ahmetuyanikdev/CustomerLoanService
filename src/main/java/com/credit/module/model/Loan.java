@@ -19,7 +19,7 @@ public class Loan {
     private Long id;
 
     @NotNull
-    private Long customerId;
+    private String customerId;
 
     @NotNull
     private float loanAmount;

@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import java.util.Set;
 public class ServiceStarter {
     @Autowired
     UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceStarter.class, args);
@@ -28,7 +31,8 @@ public class ServiceStarter {
         user.setId(1L);
         user.setName("admin");
         user.setSurname("admin");
-        user.setPassword("{noop}admin1");
+        user.setUserId("admin");
+        user.setPassword(bCryptPasswordEncoder.encode("admin1"));
         user.setRoles(Set.of("ROLE_ADMIN"));
         userRepository.save(user);
     }

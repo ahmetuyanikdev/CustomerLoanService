@@ -53,20 +53,20 @@ public class LoanServiceImplTest {
 
     @Test
     public void listCustomerLoans_returnsEmptyList_whenNoLoans() {
-        when(loanRepository.findAllByCustomerId(anyLong())).thenReturn(Collections.emptyList());
-        List<Loan> loanInstallmentList = loanService.listCustomerLoans(1L);
+        when(loanRepository.findAllByCustomerId(anyString())).thenReturn(Collections.emptyList());
+        List<Loan> loanInstallmentList = loanService.listCustomerLoans("1L");
         assert loanInstallmentList.isEmpty();
-        verify(loanRepository).findAllByCustomerId(1L);
+        verify(loanRepository).findAllByCustomerId("1L");
     }
 
     @Test
     public void listCustomerLoans_returnsLoanList_whenPresent() {
         Loan loan = new Loan();
         loan.setId(1L);
-        when(loanRepository.findAllByCustomerId(anyLong())).thenReturn(List.of(loan));
-        List<Loan> loanInstallmentList = loanService.listCustomerLoans(1L);
+        when(loanRepository.findAllByCustomerId(anyString())).thenReturn(List.of(loan));
+        List<Loan> loanInstallmentList = loanService.listCustomerLoans("1L");
         assert loanInstallmentList.size() == 1;
-        verify(loanRepository).findAllByCustomerId(1L);
+        verify(loanRepository).findAllByCustomerId("1L");
     }
 
     @Test
@@ -93,7 +93,7 @@ public class LoanServiceImplTest {
         loan.setLoanAmount(200f);
         loan.setId(1L);
         loanCreation.setLoan(loan);
-        loanCreation.getLoan().setCustomerId(1L);
+        loanCreation.getLoan().setCustomerId("1L");
         LoanInstallment loanInstallment1 = new LoanInstallment();
         loanInstallment1.setAmount(100f);
         loanInstallment1.setLoanId(1L);
@@ -130,7 +130,7 @@ public class LoanServiceImplTest {
         loan.setLoanAmount(200f);
         loan.setId(1L);
         loan.setPaid(false);
-        loan.setCustomerId(1L);
+        loan.setCustomerId("1L");
         LoanInstallment loanInstallment1 = new LoanInstallment();
         loanInstallment1.setAmount(100f);
         loanInstallment1.setLoanId(1L);

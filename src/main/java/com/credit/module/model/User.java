@@ -16,6 +16,10 @@ public class User {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
+    private String userId;
+
+    @NotBlank
     private String name;
 
     @NotBlank

@@ -8,6 +8,7 @@ import com.credit.module.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,22 +21,26 @@ public class LoanController {
     private LoanService loanService;
 
     @GetMapping(value = "/list/{customerId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Loan> listCustomerLoans(@PathVariable long customerId) {
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #customerId == authentication.principal.username)")
+    public List<Loan> listCustomerLoans(@PathVariable String customerId) {
         return loanService.listCustomerLoans(customerId);
     }
 
-    @GetMapping(value = "/installments/{loanId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<LoanInstallment> listLoanInstallments(@PathVariable long loanId) {
+    @GetMapping(value = "/installments/{customerId}/{loanId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #customerId == authentication.principal.username)")
+    public List<LoanInstallment> listLoanInstallments(@PathVariable String customerId, @PathVariable long loanId) {
         return loanService.listLoanInstallments(loanId);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody LoanCreation loanCreation) {
+    @PostMapping("/{customerId}")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #customerId == authentication.principal.username)")
+    public ResponseEntity<Object> save(@PathVariable String customerId, @RequestBody LoanCreation loanCreation) {
         return loanService.createCustomerLoan(loanCreation);
     }
 
-    @PutMapping("/payment")
-    public ResponseEntity<Object> payLoan(@RequestBody LoanPayment loanPayment) {
+    @PutMapping("/payment/{customerId}")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #customerId == authentication.principal.username)")
+    public ResponseEntity<Object> payLoan(@PathVariable String customerId, @RequestBody LoanPayment loanPayment) {
         return loanService.payLoan(loanPayment);
     }
 }

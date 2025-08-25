@@ -47,7 +47,7 @@ public class LoanServiceImpl implements LoanService {
     private Validator loanPaymentValidator;
 
     @Override
-    public List<Loan> listCustomerLoans(long customerId) {
+    public List<Loan> listCustomerLoans(String customerId) {
         return loanRepository.findAllByCustomerId(customerId);
     }
 
@@ -111,7 +111,7 @@ public class LoanServiceImpl implements LoanService {
     private void updateCustomerCreditAfterPayment(LoanPayment loanPayment) {
         Optional<Loan> loanOptional = loanRepository.findById(loanPayment.getLoanId());
         loanOptional.flatMap(
-                        loan -> userRepository.findById(loan.getCustomerId()))
+                        loan -> userRepository.findByUserId(loan.getCustomerId()))
                 .ifPresent(user -> {
                     Customer customer = (Customer) user;
                     customer.setUsedCreditLimit(customer.getUsedCreditLimit() + loanPayment.getAmount());
