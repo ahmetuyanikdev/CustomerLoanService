@@ -1,4 +1,4 @@
-This application manages dependecies and build by maven. 
+This application manages dependencies and build by maven. 
 After cloning this repo, you can navigate to project directory where pom.xml exists. 
 
 Then execute 
@@ -15,7 +15,9 @@ You can start the application by
 **java -jar CustomerLoanService-1.0-SNAPSHOT.jar
 **
 
-it will start the application on 8080 port.
+it will start the application on port 8080.
 
 You can refer to user manuel document about how to call endpoints.
-Also there will be a postman collection for the endpoints. 
+Also, there will be a postman collection for the endpoints. 
+
+You can find user-manuel and postman collection in the docs folder.
