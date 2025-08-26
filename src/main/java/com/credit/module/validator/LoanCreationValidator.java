@@ -12,15 +12,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 
 /**
  * Validator implementation for validating the creation of loans. This class ensures that
  * the loan creation process adheres to specific business rules and constraints to maintain
  * financial integrity and validity.
- *
+ * <p>
  * Key validations performed by this validator:
  * - Checks if the customer associated with the loan exists in the system by using the customer ID.
  * - Validates that the customer's available credit limit is sufficient to accommodate the requested loan amount.
@@ -28,7 +30,6 @@ import java.util.Optional;
  * - Validates that the loan's interest rate falls within the acceptable range of 0.1 to 0.5.
  * - Confirms that all loan installment amounts are the same.
  * - Validates that the total sum of all loan installments, including interest, is equal to the calculated loan amount.
-
  */
 @Component("loanCreationValidator")
 @Setter
@@ -59,6 +60,8 @@ public class LoanCreationValidator implements Validator {
         if (!(loan.getNumberOfInstallment() % 3 == 0 && loan.getNumberOfInstallment() <= 24)) {
             errors.reject("customer.loan.number.of.installment.not.valid", "Loan number of installment not valid");
             return;
+        } else {
+            initializeLoanInstallmentEntries(loanCreation, loan);
         }
         if (!(0.1 <= loan.getInterestRate() && loan.getInterestRate() <= 0.5)) {
             errors.reject("customer.loan.interest.rate.not.valid", "Loan interest rate not valid");
@@ -77,5 +80,14 @@ public class LoanCreationValidator implements Validator {
             errors.reject("customer.loan.installment.amounts.not.equal.to.loan.amount", "Loan installment amounts not" +
                     " equal to loan amount");
         }
+    }
+
+    private static void initializeLoanInstallmentEntries(LoanCreation loanCreation, Loan loan) {
+        loanCreation.setLoanInstallments(new LinkedList<>());
+        IntStream.range(0, loan.getNumberOfInstallment()).forEach(i -> {
+            LoanInstallment loanInstallment = new LoanInstallment();
+            loanInstallment.setAmount(loan.getLoanAmount() * (1 + loan.getInterestRate()) / loan.getNumberOfInstallment());
+            loanCreation.getLoanInstallments().add(loanInstallment);
+        });
     }
 }
