@@ -21,6 +21,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -132,7 +133,18 @@ public class LoanServiceImpl implements LoanService {
             if (installment.getAmount() <= loanPayment.getAmount()) {
                 installment.setPaid(true);
                 installment.setPaymentDate(LocalDate.now());
-                installment.setPaidAmount(installment.getAmount());
+                float unDoOrOverdueCharge = 0;
+                if (installment.getDueDate().isBefore(LocalDate.now())) {
+                    installment.setOverdue(true);
+                    long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), installment.getDueDate());
+                    unDoOrOverdueCharge = (float) (daysBetween * installment.getAmount() * 0.001);
+                } else if (installment.getDueDate().isAfter(LocalDate.now())) {
+                    installment.setUnDue(true);
+                    long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), installment.getDueDate());
+                    unDoOrOverdueCharge = -(float) (daysBetween * installment.getAmount() * 0.001);
+                }
+                installment.setUnDoOrOverdueCharge(unDoOrOverdueCharge);
+                installment.setPaidAmount(installment.getAmount() + unDoOrOverdueCharge);
                 loanPayment.setAmount(loanPayment.getAmount() - installment.getAmount());
                 paidLoanInstallments.add(installment);
             }

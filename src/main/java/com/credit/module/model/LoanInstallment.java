@@ -34,6 +34,15 @@ public class LoanInstallment {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate paymentDate;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "paid", access = JsonProperty.Access.READ_ONLY)
     private boolean isPaid;
+
+    @JsonProperty(value = "overdue", access = JsonProperty.Access.READ_ONLY, defaultValue = "false")
+    private boolean isOverdue;
+
+    @JsonProperty(value = "unDue", access = JsonProperty.Access.READ_ONLY, defaultValue = "false")
+    private boolean isUnDue;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private float unDoOrOverdueCharge;
 }

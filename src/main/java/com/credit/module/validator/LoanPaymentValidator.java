@@ -16,13 +16,13 @@ import static com.credit.module.util.LoanUtil.getEligibleToPayLoanInstallments;
 /**
  * Validator implementation for validating the loan payment process. This class ensures
  * that the loan payments adhere to specific business constraints.
- *
+ * <p>
  * This validator:
  * 1. Validates that the payment amount is greater than zero.
  * 2. Checks if there are any unpaid installments for the loan. If all installments
- *    have been paid, an error is reported.
+ * have been paid, an error is reported.
  * 3. Ensures that the payment date falls within the valid range of the first day of
- *    the first month up to the last day of the third month for eligible installments.
+ * the first month up to the last day of the third month for eligible installments.
  */
 
 @Component(value = "loanPaymentValidator")
@@ -56,8 +56,8 @@ public class LoanPaymentValidator implements Validator {
                 getEligibleToPayLoanInstallments(unpaidLoanInstallmentList);
 
         if (eligibleLoanInstallmentsToPay.isEmpty()) {
-            errors.reject("loan.payment.date.invalid", "Loan payment date must be between first day of first month " +
-                    "and last day of third month");
+            errors.reject("loan.payment.date.not.in.installment.payment.range", "There is no eligible installment to " +
+                    "pay for three consecutive months starting from today's date ");
         }
     }
 

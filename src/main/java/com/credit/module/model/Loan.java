@@ -34,6 +34,6 @@ public class Loan {
     @NotNull
     private LocalDate createDate;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "paid", access = JsonProperty.Access.READ_ONLY)
     private boolean isPaid;
 }
